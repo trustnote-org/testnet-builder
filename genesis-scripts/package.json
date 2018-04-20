@@ -21,7 +21,7 @@
     "secp256k1": "secp256k1/js"
   },
   "dependencies": {
-    "trustnote-common": "git+ssh://git@github.com:trustnote/trustnote-common.git",
-    "trustnote-headless": "git+ssh://git@github.com:trustnote/trustnote-headless.git"
+     "trustnote-common": "git+https://github.com/trustnote/trustnote-common.git",
+    "trustnote-headless": "git+https://github.com/trustnote/trustnote-headless.git"
   }
 }
