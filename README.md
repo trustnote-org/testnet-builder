@@ -1,53 +1,99 @@
-To build the trustnote's testnet it is required to follow the instruction below. This instruction will result in successful build only on **Linux** systems. The most important reason is, Linux is a better platform for developers. Even more, the complexity of windows environment which requires plenty of additional packages are avoided by using Linux system. This manual describes the installation of testnet from installing few additional packages and required tools on the system to all the required setting needed to be modified. Finally, it is explained that how to make the testnet works properly.
+# Setup Your TrustNote Testnet from Source
 
-# **Installing required tools on Ubuntu**
-The following procedure has been tested on ubuntu version 16.04 successfully.
+TrustNote is a Directed Acyclic Graph (DAG) based distributed ledger and its development platform for the tokenized economy.
 
-First step is to install "compiler" and "git" as below:
-> sudo apt-get install build-essential git
+In this tutorial, I will walk you through the simple steps to set up a TrustNote testnet that is separate from the TrustNote main chain.
 
-Next is to install "nvm":
-> curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+After successfully completing this tutorial, you’ll have a fully functional TrustNote testnet running on your local computer. This local testnet will allow you to play with the TrustNote software, interact with the examples and the DAG explorer, and of course develop and test your own decentralized apps and tokens in isolation from the TrustNote main chain!
 
-Finally, to reconnect your server and make sure that "nvm" working, also checking the "nvm" version:
-> nvm -v
+## Prerequisites
 
-Further more, to install "lts node.js" in "nvm":
-> nvm install 8.9.4
+- **Ubuntu 16.0.4:** This guide assumes that you are using Ubuntu 16.0.4. Before you begin, you should have a non-root user account with `sudo` privileges set up on your system.
 
-And for checking the version of "node.js" and "npm":
-> node -v<br>
-> npm -v
+- **Build Essential:** The first step is to check if you have install build essentials, If not, you can tun the following commands to install:
 
-It's also required to install "node.js process manager":
-> npm install pm2 -g
+```
+sudo apt-get install build-essential git
+```
 
-And to install "node.js native code compiler":
-> npm install node-gyp -g
+- **nvm 0.33:** You can use `nvm --version` to check if you have installed Nvm 0.33 correctly. To install or upgrade, run cURL and nvm’s install script as following:
 
-# **Downloading trustnote source code**
-In order to download the trsutnote source code, you are required to generate ssh key before continuing the following steps.
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
 
-**notice: Please, do not set the passphrase. Otherwise, 'npm install' will keep waiting for the user input, even though you insert the input, the process will be aborted.**
-> mkdir ~/.ssh<br>
-> ssh-keygen -t rsa -C "yourEmail@example.com"<br>
-> cat ~/.ssh/id_rsa.pub<br>
-> ssh-rsa<br> AAAAB3NzaC1yc2EAAAADAQABAAABAQDH5A8oWo8NNXdfRcqjSY4mY18s079UF7C5Jni9aHZQ9iJ7iNH+53R4TSfztEhvkUnGe7XrQSfodWXu16FOnH1dIXZzJ63hR6lZ4ZOz9opt4AOkoGgJ1NC7Z1oFW7OX6siWSjElSHc1lfNiSia+aazIbN5LlYe6B966EJ2bGCE1HRqAJrhAA1zlGL+CCUYcyRBvjv+mTx+GWMqwixh3TKgbt7+xEuKnbDaVWXF+LlgjSKg2qzehgmjiA4WFQBZnhB5z3990ZGrbSrdUUnpdpYHbWaZBQWoN36QwkBo4RNr6KYpdRbHCTRVqIWMpeI08GMMypIh7QIASUAM6pPIWq5qd yourname@example.com
+- **Node.js 8:** You can run `node -v` to check if you have installed Node.js 8 correctly. If not, following guideline from [nodejs.org](https://nodejs.org/en/) for how to install Node.js 8 on Ubuntu based Linux distributions.
 
-Next it is needed to set the "public-key" to "gitee" and to download "testnet-builder" package from [TrustNote](https://github.com/trustnote):
-> cd ~<br>
-> git clone https://github.com/trustnote/testnet-builder.git
+```
+nvm install 8.9.4
+```
 
-Even more, we should download "hub", "witness" and "headless" from "gitee" in "testnet-builder/". After the download completion it is required to run 'npm install' in each sub-folder.
-> cd testnet-builder<br>
-> git clone https://github.com/trustnote/trustnote-hub.git<br>
-> git clone https://github.com/trustnote/trustnote-witness.git<br>
-> git clone https://github.com/trustnote/trustnote-headless.git<br>
-> git clone https://github.com/trustnote/trustnote-explorer.git
+- **PM2:** Starting a TrustNote testnote requires PM2, a general-purpose process manager and a production runtime for Node.js apps with a built-in Load Balancer. You can use npm to install PM2 if it’s not being installed:
 
-If "npm install" throws any error or exception, it is required to run "npm install" for more times until it works properly.
+```
+sudo npm install pm2 -g
+```
 
-# **Files available in ~/testnet-builder/ directory**
+- **node-gyp:** Compiling TrustNote needs node-gyp, a cross-platform command-line tool written in Node.js for compiling native addon modules for Node.js. You can use npm to install node-gyp if it’s not being installed:
+
+```
+sudo npm install node-gyp -g
+```
+
+## 1. Generate a new SSH key
+
+- Run the following command from your home directory:
+
+```
+ssh-keygen -t rsa -C "your_email@example.com"
+```
+
+- Press **Enter** to accept all default actions when you are prompt for input. Please do **NOT** set the passphrase when prompted.
+
+- Your public key will be saved in `~/.ssh/id_rsa.pub` and you can view it by running the command below:
+
+```
+cat ~/.ssh/id_rsa.pub
+```
+
+## 2. Install the Source Code
+
+- Download the testnet-builder package from GitHub:
+
+```
+git clone https://github.com/trustnote/testnet-builder.git
+```
+
+- Get the rest of the packages and install them one by one:
+
+```
+cd testnet-builder
+git clone https://github.com/trustnote/trustnote-hub.git
+git clone https://github.com/trustnote/trustnote-witness.git
+git clone https://github.com/trustnote/trustnote-headless.git
+git clone https://github.com/trustnote/trustnote-explorer.git
+cd trustnote-hub
+npm install
+cd ../trustnote-witness
+npm install
+cd ../trustnote-headless
+npm install
+cd ../trustnote-explorer
+npm install
+cd ../genesis-scripts
+npm install
+```
+
+- Create a `data` folder in your `~/testnet-builder` directory:
+
+```
+cd ~/testnet-builder
+mkdir data
+```
+
+- After this, you should have the following folder structure exists in your `~/testnet-builder` directory:
+
+```
 ├── config-files<br>
 │   ├── constants.js<br>
 │   ├── hub-conf.js<br>
@@ -68,18 +114,26 @@ If "npm install" throws any error or exception, it is required to run "npm insta
 ├── trustnote-headless<br>
 ├── trustnote-hub<br>
 └── trustnote-witness
+```
 
-# **Running the testnet-builder script**
-It is required to copy all files in "testnet-builder" folder to "trustnote-headless/play:
-> cp -r ~/testnet-builder/genesis-scripts/* ~/testnet-builder/trustnote-headless/play/
+## 3. Create configuration files
 
-And then:
-> cd ~/testnet-builder/trustnote-headless/play<br>
-> node create_allConfig.js
+- Copy all scripts from `~/testnet-builder/genesis-scripts` to `~/trustnote-headless/play`:
 
-Eventually all data generated will be available at "~/testnet-builder/data/"
+```
+cp -r ~/testnet-builder/genesis-scripts/* ~/testnet-builder/trustnote-headless/play/
+```
 
-# **Files available in "~/testnet-build/data/" directory**
+- Now you can create the keys and addresses of the 12 witnesses by running the commands below:
+
+```
+cd ~/testnet-builder/trustnote-headless/play
+node create_allConfig.js
+```
+
+- After this, you should have files and folders like below exists in your `~/testnet-builder/data` directory:
+
+```
 ├── allAddress.json<br>write something
 ├── config.json -- seed, keys and address of witness1,witness2,...,witness12,headless13,headless14 and headless15<br>
 ├── headlessXX -- primary data of headlessXX<br>
@@ -89,78 +143,136 @@ Eventually all data generated will be available at "~/testnet-builder/data/"
 │   ├── conf.json<br>
 │   └── keys.json<br>
 └── witnessAddress.json
+```
 
-# **Create genesis unit**
-In the following steps headless15, assigned in trustnote-headless/play/package.json, will be used to generate the genesis unit.
+## 4. Create the Genesis Unit
 
-To delete headless15's database:
-> rm -rf ~/.config/headless15/trustnote*
+In the following steps, we will start with headless15, assigned in `trustnote-headless/play/package.json`, to send the payment to headless14 and generate the genesis unit accordingly.
 
-Next for renewing headless15's conf.json and keys.json:
-> cp -r ~/testnet-builder/data/headless15/ ~/.config/
+- At first, delete headless15’s existing database configuration files from `~/.config/headless15`:
 
-Also to get the addresses of "witnesses" and "headlesses":
-> cat ~/testnet-builder/data/config.json<br>
->{<br>
->                "passphrase": "",<br>
->                "mnemonic_phrase": "faith oak symbol link window deliver gym shift know lab forest cupboard",<br>
->                "temp_priv_key": "ZXDxyZAPltxWEoloDUnHgh8bpzsO5B+3N3uvTh3FfO8=",<br>
->                "prev_temp_priv_key": "EyM9Cei0+ACAQvXmXOqvzsdgp5JTPQLPBFkcTzK0yYs=",<br>
->                **"address": "OZAMEJPXNVBSRDPYO5WQWDOWBUTNUIF7",**<br>
->                "wallet": "iOF60fTjMyjNEMHLjAYR3ptTBv12wKHpS9LyQyE5FaU=",<br>
->                "is_change": 0,<br>
->                "address_index": 0,<br>
->                "definition": [<br>
->                        "sig",<br>
->                        {<br>
->                                "pubkey": "At+qvLBte+RkXGZCQ1+7uU5pHm03Y3S9Ciapj/KEq2yj"<br>
->                        }<br>
->                ]<br>
->        },<br>
+```
+rm -rf ~/.config/headless15/trustnote*
+```
 
-Update create_genesis.js.<br>
-Update arrOutputs (change address of the genesis unit) with headless13's address.<br>
-Update from_address (sending address of the first transaction) in createPayment() with headless15's address.<br>
-Update payee_address (receiving address of the first transaction) in createPayment() with headless14's address.<br>
+- Copy the renewed headless15’s configuration files to `~/.config`:
 
-Now, it is required to run "create_genesis.js" for first time to get hash value of the genesis unit.
-> node create_genesis.js
+```
+cp -r ~/testnet-builder/data/headless15/ ~/.config/
+```
 
-So, you will get the hash of the genesis unit if everything is OK.
-> ---------->>->> Genesis d, hash=**uYjgSazo4Q+OtA7gZrHGuMWoFvUQFitzuu6juWGA/cI=**
+- Open `~/testnet-builder/data/config.json`, the json file has an array of 15 objects, each of the object contains a collection of name/value pairs like these:
 
-To update the *exports.GENESIS_UNIT* in "config-files/constants.js" which will be used by hub and witnesses.
-> vi ~/testnet-build/config-files/constants.js<br>
+```
+{“
+    passphrase”: “”,
+    “mnemonic_phrase”: “crash renew radio foster argue host call deposit chuckle ticket early believe”,
+    “temp_priv_key”: “XaOz4jyG1sBt3Oeyfv + 3 Vj67NkhoOzuC1ceaGos0NPs = ”,
+    “prev_temp_priv_key”: “RJbEXfG8eTvAOeczPt4RBtKxEC2mr / Ias7O635fBqbU = ”,
+    “address”: “TIHRRM42ZMOMMSX5IOTNXWVBXGGJ7Y3O”,
+    “wallet”: “giApdCEqifheY7cRZZhgR9b7qDJb6Uow7F7qPGYw35w = ”,
+    “is_change”: 0,
+    “address_index”: 0,
+    “definition”: [“sig”,
+        {“
+            pubkey”: “AoESfCk79 + sE48BAhEs0L8NzCsPy3V06fNf3MhlBG / Ve”
+        }
+    ]
+}
+```
 
-Also, delete "database of headless15" before running "create_genesis.js" for second time.
-> rm -rf ~/.config/headless15/trustnote*
+- Copy the addresses of the last 3 objects, which represent **headless13**, **headless14**, and **headless15** respectively
 
-# **Startup hub and witnesses**
-To startup hub and witness first it is required to update **exports.initial_witnesses** in "hub-conf.js" and "explorer-conf.js" by using the data in "testnet-builder/data/**witnessAddress.json**".
-> cat ~/testnet-builder/data/witnessAddress.json<br>
-> vi ~/testnet-builder/config-files/hub-conf.js<br>
-> vi ~/testnet-builder/config-files/explorer-conf.js
+- Open `~/testnet-builder/trustnote-headless/play/create_genesis.js`
 
-Second running the "deploy" script:
-> cd ~/testnet-builder<br>
-> ./deploy.sh
+- Replace the address value of `arrOutputs` (at line: 23) with the address value of **headless13**
 
-Now, it's time to startup "hub" and "witnesses":
-> ./start.sh
+- Replace `from_address` (at line: 52) with the address value of **headless15**
 
-Then, for viewing hub's log:
-> pm2 logs hub
+- Replace `payee_address` (at line: 53) with the address value of **headless14**
 
-Finally, for checking incoming connections:
-> Tue Feb 27 2018 13:54:51 GMT+0800 (CST): **12 incoming connections**, 0 outgoing connections, 0 outgoing connections being opened
+- Save the file
 
-# **One more final step to go**
-This last step is running "create_genesis.js" one more time. Last time, hub considered the genesis unit as invalid. Therefore, after updating the hash value of the genesis unit in hub and witness, you are required to run create_genesis.js again. Please, note that before running create_genesis.js, you must delete headless15's database first.
-> rm -rf ~/.config/headless15/trustnote*
-> cd ~/testnet-builder/trustnote-headless/play<br>
-> node create_genesis.js
+- Now we can generate the genesis unit by running the command below from `~/testnet-builder/trustnote-headless/play`:
 
-Finally, we will observe that the testnet is built and running successfully, and you can visit the DAG ledger explorer by ip:port.
+```
+node create_genesis.js
+```
+
+- Press Enter to accept the default action when you are prompt for input. If successful, you will see the following output message which contains the **hash** of the genesis unit just being created:
+
+```
+---------->>->> Genesis d, hash=7KMUvSjlmMVGdlArmorJJn+5DwGUwNRPr4Ar4m/F49w=
+```
+
+## 5. Starts the Hub and the Witnesses
+
+- Before starting the hub and the witnesses, we need to update `exports.GENESIS_UNIT` in `~/testnet-build/config-files/constants.js` (at Line: 13) with the **hash** of the genesis unit we just created.
+
+- Open `testnet-builder/data/witnessAddress.json`, copy its data as shown below:
+
+```
+"5JW7CSFALLSWZSU3ILMVCYV62NAV5YNL",
+"6X7X5MJGHOQXG57Z6U3NASRKKC22UWYZ",
+"7C737V44ZMHGTOTTXS4HGAFXVKM2R6KQ",
+"CIEAKDZBBU7BXTQNFKVE3CCPKTTXBBV4",
+"FDFW66BEBF7FG7OHJPGXSYXU7DVCWXE3",
+"FFJICZZ2BMFHNML6PWVPRAI33E6SGLSN",
+"FPOTZYGAZBJYPUSQ44IB4JO57HCQPGWJ",
+"JAVZCH7EMQOGCZG7BEP7P4AY4XQ2OIDR",
+"KTKQ2T4LZGCW46Z5W5RLN5CCABA5WXJ7",
+"N37NPAAADEOVEEC62FN7S4HM7TNBFESH",
+"N6SOVZK24YSS3IZOND3HOAKOC3UMCFKL",
+"QZ6WCQCWXDGUXXJPWISOLILDBTHGNDOD"
+```
+
+- Open `~/testnet-builder/config-files/hub-conf.js`, replace the value of `exports.initial_witnesses` (at Line: 26) with the data copied from `testnet-builder/data/witnessAddress.json`, save the file
+
+- Open `~/testnet-builder/config-files/explorer-conf.js`, replace the value of `exports.initial_witnesses` (at Line: 14) with the same data copied from `testnet-builder/data/witnessAddress.json`, save the file
+
+- Run `~/testnet-builder/deploy.sh` to copy all witness’ configuration files to the right place:
+
+```
+cd ~/testnet-builder
+chmod +x deploy.sh
+./deploy.sh
+```
+
+- Now we can start the hub and the witnesses:
+
+```
+chmod +x start.sh
+./start.sh
+```
+
+- You can view the hub’s log file by running the following command:
+
+```
+pm2 logs hub
+```
+
+- And check the output of the log file and make sure you do have incoming connections like this:
+
+```
+0|hub      | Sat Jun 02 2018 20:33:24 GMT-0700 (PDT): 13 incoming connections, 0 outgoing connections, 0 outgoing connections being opened
+```
+
+## 6. The final step
+
+As we mentioned previously, after the hub and witnesses are started, we need to delete headless15’s database configuration file and run create_genesis.js one more time to broadcast the genesis unit:
+
+```
+rm -rf ~/.config/headless15/trustnote*
+cd ~/testnet-builder/trustnote-headless/play
+node create_genesis.js
+```
+
+Press Enter to accept the default action when you are prompt for input.
+
+Now you should be able to visit the DAG explorer by opening http://127.0.0.1:8080 from the web browser on your local computer.
+
+You can play with the DAG explorer by entering the addresses you know in the search field and press the search button now!
+
 
 # **Important files and variables**
 - ./config-files/hub-conf.js **exports.port** **exports.initial_witnesses**
