@@ -94,25 +94,25 @@ mkdir data
 - After this, you should have the following folder structure exists in your `~/testnet-builder` directory:
 
 ```
-├── config-files<br>
-│   ├── constants.js<br>
-│   ├── hub-conf.js<br>
-│   ├── witness-conf.js<br>
-│   ├── witness-headless-start.js<br>
-│   └── witness-start.js<br>
-├── data -- store key and address files<br>
-├── deploy.sh -- used to generate 12 witnesses automatically<br>
-├── genesis-scripts -- store scripts whick are related to generate the genesis unit<br>
-│   ├── conf.js <br>
-│   ├── create_allConfig.js -- used to generate 12 witnesses's keys and addresses , and should be runned before create_genesis.js<br>
-│   ├── create_genesis.js -- used to generate the genesis unit<br>
-│   └── package.json<br>
-├── Readme.md -- this file<br>
-├── remove-all-data.sh delete the database of hub, witness and headless in “~/.config/”<br>
-├── start.sh -- start up hub and 12 witnesses by using pm2<br>
-├── trustnote-explorer<br>
-├── trustnote-headless<br>
-├── trustnote-hub<br>
+├── config-files
+│   ├── constants.js
+│   ├── hub-conf.js
+│   ├── witness-conf.js
+│   ├── witness-headless-start.js
+│   └── witness-start.js
+├── data -- store key and address files
+├── deploy.sh -- used to generate 12 witnesses automatically
+├── genesis-scripts -- store scripts whick are related to generate the genesis unit
+│   ├── conf.js 
+│   ├── create_allConfig.js -- used to generate 12 witnesses's keys and addresses , and should be runned before create_genesis.js
+│   ├── create_genesis.js -- used to generate the genesis unit
+│   └── package.json
+├── Readme.md -- this file
+├── remove-all-data.sh delete the database of hub, witness and headless in “~/.config/”
+├── start.sh -- start up hub and 12 witnesses by using pm2
+├── trustnote-explorer
+├── trustnote-headless
+├── trustnote-hub
 └── trustnote-witness
 ```
 
@@ -134,14 +134,14 @@ node create_allConfig.js
 - After this, you should have files and folders like below exists in your `~/testnet-builder/data` directory:
 
 ```
-├── allAddress.json<br>write something
-├── config.json -- seed, keys and address of witness1,witness2,...,witness12,headless13,headless14 and headless15<br>
-├── headlessXX -- primary data of headlessXX<br>
-│   ├── conf.json<br>
-│   └── keys.json<br>
-├── witnessXX -- primary data of witnessXX<br>
-│   ├── conf.json<br>
-│   └── keys.json<br>
+├── allAddress.jsonwrite something
+├── config.json -- seed, keys and address of witness1,witness2,...,witness12,headless13,headless14 and headless15
+├── headlessXX -- primary data of headlessXX
+│   ├── conf.json
+│   └── keys.json
+├── witnessXX -- primary data of witnessXX
+│   ├── conf.json
+│   └── keys.json
 └── witnessAddress.json
 ```
 
