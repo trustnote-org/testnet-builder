@@ -14,7 +14,7 @@ var headlessWallet = require('trustnote-headless');
 const witness_budget = 1000000;
 const witness_budget_count = 8;
 const genesisConfigFile = "../../data/config.json";
-const creation_message = "先帝创业未半而花光预算"
+const creation_message = "梦想从这里开始!，Dream begins here!"
 
 var genesisConfigData = {};
 var witnesses = [];
